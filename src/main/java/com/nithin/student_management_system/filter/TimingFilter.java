@@ -7,9 +7,8 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
-@Order(1)
-public class LoggingFilter implements Filter {
-
+@Order(2)
+public class TimingFilter implements Filter {
     @Override
     public void doFilter(
             ServletRequest request,
@@ -17,10 +16,10 @@ public class LoggingFilter implements Filter {
             FilterChain chain)
             throws IOException, ServletException {
 
-        System.out.println("LoggingFilter - Before");
+        System.out.println("TimingFilter - Before");
 
         chain.doFilter(request, response);
 
-        System.out.println("LoggingFilter - After");
+        System.out.println("TimingFilter - After");
     }
 }

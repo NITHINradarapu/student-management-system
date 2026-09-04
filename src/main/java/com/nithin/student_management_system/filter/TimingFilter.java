@@ -1,6 +1,8 @@
 package com.nithin.student_management_system.filter;
 
 import jakarta.servlet.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -9,6 +11,9 @@ import java.io.IOException;
 @Component
 @Order(2)
 public class TimingFilter implements Filter {
+
+    private static final Logger log = LoggerFactory.getLogger(TimingFilter.class);
+
     @Override
     public void doFilter(
             ServletRequest request,
@@ -16,10 +21,12 @@ public class TimingFilter implements Filter {
             FilterChain chain)
             throws IOException, ServletException {
 
-        System.out.println("TimingFilter - Before");
+        long start = System.currentTimeMillis();
+        log.info("TimingFilter - Before");
 
         chain.doFilter(request, response);
 
-        System.out.println("TimingFilter - After");
+        long elapsed = System.currentTimeMillis() - start;
+        log.info("TimingFilter - After | Request took {} ms", elapsed);
     }
 }

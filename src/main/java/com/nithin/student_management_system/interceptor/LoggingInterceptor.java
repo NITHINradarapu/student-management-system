@@ -2,22 +2,27 @@ package com.nithin.student_management_system.interceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 @Component
 public class LoggingInterceptor implements HandlerInterceptor {
+
+    private static final Logger log = LoggerFactory.getLogger(LoggingInterceptor.class);
+
     @Override
     public boolean preHandle(
             HttpServletRequest request,
             HttpServletResponse response,
             Object handler) {
 
-        System.out.println("========== INTERCEPTOR ==========");
-        System.out.println("1. preHandle() - Before Controller");
-        System.out.println("Method: " + request.getMethod());
-        System.out.println("URI: " + request.getRequestURI());
+        log.info("========== INTERCEPTOR ==========");
+        log.info("1. preHandle() - Before Controller");
+        log.info("Method: {}", request.getMethod());
+        log.info("URI: {}", request.getRequestURI());
 
         return true;
     }
@@ -29,7 +34,7 @@ public class LoggingInterceptor implements HandlerInterceptor {
             Object handler,
             ModelAndView modelAndView) {
 
-        System.out.println("2. postHandle() - After Controller");
+        log.info("2. postHandle() - After Controller");
     }
 
     @Override
@@ -39,7 +44,7 @@ public class LoggingInterceptor implements HandlerInterceptor {
             Object handler,
             Exception ex) {
 
-        System.out.println("3. afterCompletion() - Request Fully Completed");
-        System.out.println("=================================");
+        log.info("3. afterCompletion() - Request Fully Completed");
+        log.info("=================================");
     }
 }

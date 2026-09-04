@@ -11,8 +11,8 @@
 	<groupId>com.nithin</groupId>
 	<artifactId>student-management-system</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
+	<name>Student Management System</name>
+	<description>Spring Boot REST API for managing student records with CRUD, soft/hard delete, validation, and global exception handling.</description>
 	<url/>
 	<licenses>
 		<license/>

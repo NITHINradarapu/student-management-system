@@ -1,17 +1,20 @@
 package com.nithin.student_management_system;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nithin.student_management_system.controller.StudentController;
 import com.nithin.student_management_system.dto.StudentRequestDto;
 import com.nithin.student_management_system.dto.StudentResponseDto;
+import com.nithin.student_management_system.exception.GlobalExceptionHandler;
 import com.nithin.student_management_system.exception.StudentNotFoundException;
 import com.nithin.student_management_system.service.StudentService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,17 +24,28 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(StudentController.class)
+/**
+ * Web-layer tests for StudentController using Spring Framework 7 standalone MockMvc.
+ * Does NOT require a Spring context, database, or @WebMvcTest (removed in Spring Boot 4.x).
+ */
+@ExtendWith(MockitoExtension.class)
 class StudentControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockitoBean
+    @Mock
     private StudentService studentService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @InjectMocks
+    private StudentController studentController;
+
+    private MockMvc mockMvc;
+
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(studentController)
+                .setControllerAdvice(new GlobalExceptionHandler())
+                .build();
+    }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
 
@@ -42,12 +56,9 @@ class StudentControllerTest {
         );
     }
 
-    private StudentRequestDto sampleRequestDto() {
-        StudentRequestDto dto = new StudentRequestDto();
-        dto.setName("Alice Johnson");
-        dto.setEmail("alice@example.com");
-        dto.setCourse("Computer Science");
-        return dto;
+    /** Returns a minimal valid JSON request body */
+    private String validJson() {
+        return "{\"name\":\"Alice Johnson\",\"email\":\"alice@example.com\",\"course\":\"Computer Science\"}";
     }
 
     // ── POST /students ────────────────────────────────────────────────────────
@@ -58,7 +69,7 @@ class StudentControllerTest {
 
         mockMvc.perform(post("/students")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(sampleRequestDto())))
+                        .content(validJson()))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.email").value("alice@example.com"));
@@ -66,27 +77,17 @@ class StudentControllerTest {
 
     @Test
     void createStudent_blankName_returns400() throws Exception {
-        StudentRequestDto invalid = new StudentRequestDto();
-        invalid.setName("");
-        invalid.setEmail("alice@example.com");
-        invalid.setCourse("Computer Science");
-
         mockMvc.perform(post("/students")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(invalid)))
+                        .content("{\"name\":\"\",\"email\":\"alice@example.com\",\"course\":\"CS\"}"))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void createStudent_invalidEmail_returns400() throws Exception {
-        StudentRequestDto invalid = new StudentRequestDto();
-        invalid.setName("Alice");
-        invalid.setEmail("not-an-email");
-        invalid.setCourse("CS");
-
         mockMvc.perform(post("/students")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(invalid)))
+                        .content("{\"name\":\"Alice\",\"email\":\"not-an-email\",\"course\":\"CS\"}"))
                 .andExpect(status().isBadRequest());
     }
 
@@ -131,7 +132,7 @@ class StudentControllerTest {
 
         mockMvc.perform(put("/students/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(sampleRequestDto())))
+                        .content(validJson()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Alice Johnson"));
     }

@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="100%" height="100%">
+  <defs>
+    <style>
+      @keyframes cursorBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+      @keyframes step1 { 0%, 5% { opacity: 0; } 8%, 100% { opacity: 1; } }
+      @keyframes step2 { 0%, 15% { opacity: 0; } 18%, 100% { opacity: 1; } }
+      @keyframes step3 { 0%, 30% { opacity: 0; } 33%, 100% { opacity: 1; } }
+      @keyframes step4 { 0%, 50% { opacity: 0; } 53%, 100% { opacity: 1; } }
+      @keyframes step5 { 0%, 70% { opacity: 0; } 73%, 100% { opacity: 1; } }
+
+      .term-bg { fill: #0d1117; rx: 12px; }
+      .term-header { fill: #161b22; rx: 12px 12px 0 0; }
+      .dot-red { fill: #ff5f56; }
+      .dot-yellow { fill: #ffbd2e; }
+      .dot-green { fill: #27c93f; }
+      .term-title { fill: #8b949e; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace; font-size: 13px; font-weight: 500; text-anchor: middle; }
+      
+      .code { font-family: "Cascadia Code", "Fira Code", Menlo, Monaco, Consolas, monospace; font-size: 13px; fill: #c9d1d9; }
+      .prompt { fill: #58a6ff; font-weight: bold; }
+      .user-input { fill: #ffffff; font-weight: 600; }
+      .tool-label { fill: #d29922; font-weight: bold; }
+      .arg-key { fill: #79c0ff; }
+      .arg-val { fill: #a5d6ff; }
+      .success { fill: #3fb950; font-weight: bold; }
+      .agent-label { fill: #bc8cff; font-weight: bold; }
+      .agent-text { fill: #e6edf3; }
+
+      .s1 { animation: step1 14s infinite; }
+      .s2 { animation: step2 14s infinite; }
+      .s3 { animation: step3 14s infinite; }
+      .s4 { animation: step4 14s infinite; }
+      .s5 { animation: step5 14s infinite; }
+    </style>
+  </defs>
+
+  <!-- Terminal Window -->
+  <rect width="900" height="520" class="term-bg" stroke="#30363d" stroke-width="1.5" />
+  <rect width="900" height="38" class="term-header" />
+  
+  <!-- Window Controls -->
+  <circle cx="24" cy="19" r="6" class="dot-red" />
+  <circle cx="44" cy="19" r="6" class="dot-yellow" />
+  <circle cx="64" cy="19" r="6" class="dot-green" />
+  <text x="450" y="24" class="term-title">student-management-system — ai-api-testing-agent (node agent.js)</text>
+
+  <!-- Terminal Content -->
+  <g transform="translate(28, 65)">
+    <!-- Header Banner -->
+    <text y="0" class="code" fill="#8b949e">Student API Testing Agent | Model: qwen3:4b (Local Ollama)</text>
+    <text y="20" class="code" fill="#8b949e">Deterministic Validation: ENABLED | Destructive Safety Gates: ACTIVE</text>
+    <text y="42" class="code" fill="#30363d">─────────────────────────────────────────────────────────────────────────────</text>
+
+    <!-- Turn 1: User prompt -->
+    <g class="s1">
+      <text y="70" class="code">
+        <tspan class="prompt">You: </tspan>
+        <tspan class="user-input">Create a student named Priya Patel, email priya@example.com, course Robotics.</tspan>
+      </text>
+    </g>
+
+    <!-- Turn 1: Tool execution -->
+    <g class="s2">
+      <text y="105" class="code">
+        <tspan class="tool-label">Executing tool: </tspan>
+        <tspan fill="#ffa657">create_student</tspan>
+      </text>
+      <text y="125" class="code" fill="#8b949e">Arguments: {</text>
+      <text y="145" class="code" fill="#8b949e">  <tspan class="arg-key">name:</tspan> <tspan class="arg-val">'Priya Patel'</tspan>, <tspan class="arg-key">email:</tspan> <tspan class="arg-val">'priya@example.com'</tspan>, <tspan class="arg-key">course:</tspan> <tspan class="arg-val">'Robotics'</tspan></text>
+      <text y="165" class="code" fill="#8b949e">}</text>
+    </g>
+
+    <!-- Turn 1: Deterministic validation -->
+    <g class="s3">
+      <text y="195" class="code">
+        <tspan fill="#8b949e">Tool result: </tspan>
+        <tspan class="success">HTTP 201 Created</tspan>
+        <tspan fill="#8b949e"> | ID: 15 | Validation: </tspan>
+        <tspan class="success">[PASS] (7/7 checks verified)</tspan>
+      </text>
+    </g>
+
+    <!-- Turn 1: Agent explanation -->
+    <g class="s4">
+      <text y="230" class="code">
+        <tspan class="agent-label">Agent: </tspan>
+        <tspan class="agent-text">The student record for Priya Patel was successfully created!</tspan>
+      </text>
+      <text y="252" class="code" fill="#7ee787">  ✓ ID: 15 | Email: priya@example.com | Course: Robotics</text>
+      <text y="272" class="code" fill="#8b949e">  ✓ Verified JPA Timestamps: 2026-11-12T15:50:12Z (Active in MySQL)</text>
+    </g>
+
+    <!-- Turn 2: Negative Testing Suite -->
+    <g class="s5">
+      <text y="315" class="code" fill="#30363d">─────────────────────────────────────────────────────────────────────────────</text>
+      <text y="340" class="code">
+        <tspan class="prompt">You: </tspan>
+        <tspan class="user-input">Run the negative test suite.</tspan>
+      </text>
+      <text y="365" class="code">
+        <tspan class="tool-label">Executing tool: </tspan>
+        <tspan fill="#ffa657">run_negative_tests</tspan>
+        <tspan fill="#8b949e"> (Executing 11 failure scenarios against Spring Boot...)</tspan>
+      </text>
+      <text y="390" class="code">
+        <tspan class="agent-label">Agent: </tspan>
+        <tspan class="success">✅ ALL PASS (11/11 Scenarios Verified in 156ms)</tspan>
+      </text>
+      <text y="412" class="code" fill="#7ee787">  • 400 Bad Request: 4 validation scenarios (missing name/email/course, bad email)</text>
+      <text y="432" class="code" fill="#7ee787">  • 409 Conflict: 2 duplicate email collision scenarios (registration &amp; update)</text>
+      <text y="452" class="code" fill="#7ee787">  • 404 Not Found: 5 missing/soft-deleted resource invariants</text>
+    </g>
+  </g>
+</svg>

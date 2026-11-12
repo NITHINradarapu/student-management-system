@@ -1,0 +1,18 @@
+{
+  "name": "ai-api-testing-agent",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "agent": "node agent.js",
+    "test:negative": "node testNegative.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "ollama": "^0.6.4"
+  }
+}
